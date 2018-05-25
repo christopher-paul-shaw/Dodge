@@ -23,10 +23,17 @@ class User extends Entity {
 	
 
 	public function __construct ($identifier=false) {
+
     	parent::__construct($identifier);
-    	$this->config = new Config();
         $this->ipLocked = !empty($this->config['user']->ipLocked); 
     	$this->multiLogin = !empty($this->config['user']->multiLogin); 
+	}
+
+
+	public function getUserByEmail($email) {
+		$result = $this->db->fetch("user/getUserByEmail",['email' => $email]);
+	
+		return $result->id_user ?? null;
 	}
 
 	public function changePassword (
@@ -87,9 +94,15 @@ class User extends Entity {
 
 	public static function logIn ($email, $password) {
 
-		$user = new self($email);
 
+
+
+		$user = new self();
+		$user_id = $user->getUserByEmail($email);
+	
+		$user = new self($user_id);
 		$realPassword = $user->getValue('password');
+	
 		if (!password_verify($password, $realPassword)) {
 			throw new Exception("Failed to Login");
 		}

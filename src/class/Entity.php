@@ -18,28 +18,27 @@ class Entity {
 
     public function __construct ($identifier=false) {
 
-	$config = new Config();
-	$dbConfig = $config["database"];
+    	$this->config = new Config();
+    	$dbConfig = $this->config["database"];
 
-	$settings = new Settings(
-		Path::get(Path::SRC) . "/query",
-		$dbConfig->dsn,
-		$dbConfig->schema,
-		$dbConfig->host,
-		$dbConfig->port,
-		$dbConfig->username,
-		$dbConfig->password
-	);
-	$db = new Database($settings);
-
+    	$settings = new Settings(
+    		Path::get(Path::SRC) . "/query",
+    		$dbConfig->dsn,
+    		$dbConfig->schema,
+    		$dbConfig->host,
+    		$dbConfig->port,
+    		$dbConfig->username,
+    		$dbConfig->password
+    	);
+    	$this->db = new Database($settings);
 
 
         $this->identifier = strtolower($identifier);
         $this->path = Path::get(Path::DATA)."/{$this->type}/";
         $this->currentDirectory =  $this->path.$this->identifier;   
 
-        $this->config = new Config();
-        $this->readOnly = !empty($this->config['general']->readOnly); 
+        $this->data = $this->db->fetch("{$this->type}/getById", ["id_{$this->type}" => $this->identifier]);
+        var_dump($this->data);
     }
 
     public function create ($payload) {  
@@ -92,16 +91,18 @@ class Entity {
     }
 
     public function getValue ($field) {
-        $this->protectField($field);
-        $path = "{$this->currentDirectory}/{$field}.dat";
-        return file_get_contents($path) ?? false;
+        return $this->data->$field ?? false;
     }
 
     public function setValue ($field,$value=false) {
-        $this->protectField($field);
+ 
         if (in_array($field,$this->blockFields) || $this->readOnly) return;
-        $path = "{$this->currentDirectory}/{$field}.dat";
-        return file_put_contents($path, $value);
+
+       $this->db->update("{$this->type}/update", [
+            "field" => $field,
+            "value" => $value,
+            "id_{$this->type}" => $this->data->id_{$this->type}
+       ]);
     }
 
     public function blankValue ($field) {

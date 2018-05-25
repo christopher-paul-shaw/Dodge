@@ -17,7 +17,7 @@ class _Common extends \Gt\Page\Logic {
 				$t->insertTemplate();
 			}
 
-			$user = new User($_SESSION['email']);
+			$user = new User(1);
 			$name = $user->getValue('name');
 
 			$nameElement = $this->document->querySelectorAll('.php-user-name');
