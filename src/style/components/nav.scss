@@ -1,0 +1,144 @@
+
+.c-nav {
+  // Set Colours
+  background: #2c3e50;
+  * {
+    color: #fff;
+    clear: both;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  z-index: 99;
+  margin-bottom: 10px;
+
+  div {
+    min-height: 50px;
+  }
+  a {
+    text-decoration: none;
+    color: #fff;
+    width: 100%;
+    display: block;
+  }
+
+  .c-nav__menu label:hover {
+    background: #333;
+  }
+
+  // Always Hide
+  .c-nav__toggle--checkbox {
+    display: none;
+  }
+
+  .c-nav__container {
+    width: 100%;
+  }
+
+  .c-nav__logo,
+  .c-nav__menu,
+  .c-nav__toggle {
+    display: inline-block;
+    min-height: 50px;
+    line-height: 50px;
+    vertical-align: top;
+  }
+
+  .c-nav__menu label {
+    line-height: 50px;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .c-nav__menu div label {
+  position: absolute;
+  }
+
+  // Sub Menus, Not Currently Used
+  .c-nav__menu label {
+    display: inline-block;
+    padding: 0px 4px;
+  }
+  .c-nav__menu .sub {
+    z-index: 2000;
+    display: none;
+    position: absolute;
+    background: #fff;
+    padding: 0px;
+    margin-left: -4px;
+    width:80px;
+   
+  }
+
+  .c-nav__menu input[type="checkbox"] {
+    display: none;
+  }
+  .c-nav__menu input[type="checkbox"]:checked ~ .sub {
+    display: block;
+  }
+  .c-nav__menu .sub a {
+    display: block;
+    z-index: 5000;
+    text-align: center;
+    margin: 0px;
+    color: #111;
+     border: 1px solid #ccc;
+  }
+  .c-nav__menu .sub a:not(:first-child) {
+    border-top: 1px solid rgba(190, 192, 192, 0.1);
+  }
+
+  // Mobile Only Logic
+  @media screen and (max-width: 900px) { 
+    .c-nav__menu {
+      display: none;
+      position: relative;
+    }
+    .c-nav__logo,
+    .c-nav__toggle {
+      padding: 0px 20px;
+      width: 30%;
+    }
+    .c-nav__toggle {
+      text-align: right;
+      float: right;
+    }
+    .c-nav__toggle--checkbox:checked ~ .c-nav__menu {
+      display: block;
+    }
+    .c-nav__menu,
+    .menu_check {
+      display: none;
+    }
+    .c-nav__menu label {
+      text-align: left;
+      padding: 10px;
+      position: relative;
+      border-top: 1px solid rgba(190, 192, 192, 0.1);
+      height: auto;
+      display: block;
+    }
+      .c-nav__menu .sub {
+        width: 100%;
+        margin-left: -10px;
+      }    
+  }
+
+  // Desktop
+  @media screen and (min-width: 900px) {
+    width: 100%;
+    top: 0px; 
+    .c-nav__toggle {
+      display: none;
+    }
+    .c-nav__menu {
+      position: relative;
+      text-align: right;
+      float: right;
+    }
+    .c-nav__container {
+      width: 900px;
+      margin: auto;
+    }
+  }
+}

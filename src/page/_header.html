@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>WebPi</title>
+      <link rel="stylesheet" href="/style/global.scss">
+   </head>
+   <body>
+      <nav class="c-nav">
+         <div class="c-nav__container">
+
+            <div class="c-nav__logo">
+               Web UI
+            </div>
+
+            <label for="menu_toggle" class="c-nav__toggle">Menu</label>
+            <input type="checkbox" id="menu_toggle" class="menu_check c-nav__toggle--checkbox">
+            <div class="c-nav__menu">
+               <span data-template="admin">
+                  <label>
+                        <a class="php-user-name">Settings</a>
+                        <input type="checkbox" />
+                        <div class="sub">
+                           <a href="/users">Users</a>
+                        </div>
+                  </label>
+               </span>
+                     <label>
+                        <a>Tools</a>
+                        <input type="checkbox" />
+                        <div class="sub">
+                           <a data-template="tool" href="">here</a>
+                        </div>
+                  </label>
+               <span data-template="logged-in">
+                  <label>
+                        <a href="/">Dash</a>
+                  </label>
+            
+                  <label>
+                        <a class="php-user-name">USER</a>
+                        <input type="checkbox" />
+                        <div class="sub">
+                           <a href="/auth/settings">Settings</a>
+                           <a href="/auth/logout">Logout</a>
+                        </div>
+                  </label>
+
+               </span>
+            </div>
+         </div>
+      </nav>
+
