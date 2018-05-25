@@ -1,7 +1,6 @@
 <?php
 namespace App\Page;
 use App\User;
-use App\Tools;
 use Gt\Response\Headers;
 
 class _Common extends \Gt\Page\Logic {
@@ -9,7 +8,6 @@ class _Common extends \Gt\Page\Logic {
 	public function go() {
 		$this->handleLogin();
 		$this->navigation();
-		$this->toolMenu();
 	}
 
 	public function navigation () {
@@ -20,7 +18,7 @@ class _Common extends \Gt\Page\Logic {
 			}
 
 			$user = new User($_SESSION['email']);
-			$name = $user->getValue('../name');
+			$name = $user->getValue('name');
 
 			$nameElement = $this->document->querySelectorAll('.php-user-name');
 			foreach ($nameElement as $e) {
@@ -36,17 +34,6 @@ class _Common extends \Gt\Page\Logic {
 		}
 	}
 
-	public function toolMenu () {
-		$tools = new Tools();
-	
-		$options = $tools->list();
-		foreach ($options as $name => $url) {	
-			$t = $this->template->get('tool');
-			$t->setAttribute('href',$url);
-			$t->textContent = ucfirst($name);
-			$t->insertTemplate();
-		}
-	}
 
 	public function handleLogin() {
 

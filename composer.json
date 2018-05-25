@@ -1,7 +1,8 @@
 {
     "require": {
         "phpgt/webengine": "^2.2",
-        "phpgt/database": "^0.8.0"
+        "phpgt/database": "^0.8.0",
+        "phpgt/fetch": "^0.3.0"
     },
     "autoload": {
 		"psr-4": {

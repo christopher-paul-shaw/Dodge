@@ -4,7 +4,8 @@ use Gt\Core\Path;
 use Exception;
 use DirectoryIterator;
 use Gt\Core\Config;
-
+use Gt\Database\Connection\Settings;
+use Gt\Database\Database;
 class Entity {
 
     public $type = 'default';
@@ -16,6 +17,23 @@ class Entity {
     public $ipLocked = false;
 
     public function __construct ($identifier=false) {
+
+	$config = new Config();
+	$dbConfig = $config["database"];
+
+	$settings = new Settings(
+		Path::get(Path::SRC) . "/query",
+		$dbConfig->dsn,
+		$dbConfig->schema,
+		$dbConfig->host,
+		$dbConfig->port,
+		$dbConfig->username,
+		$dbConfig->password
+	);
+	$db = new Database($settings);
+
+
+
         $this->identifier = strtolower($identifier);
         $this->path = Path::get(Path::DATA)."/{$this->type}/";
         $this->currentDirectory =  $this->path.$this->identifier;   
