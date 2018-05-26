@@ -7,9 +7,6 @@ use Gt\Core\Config;
 
 
 class User extends Entity {
-
-	public $type = 'user';
-	public $storage = '/data';
 	
 	public $blockFields = [
 		'current_password',
@@ -21,17 +18,16 @@ class User extends Entity {
 		'password',    
 	];     
 	
-
+	public $type = 'user';
 	public function __construct ($identifier=false) {
-
     	parent::__construct($identifier);
         $this->ipLocked = !empty($this->config['user']->ipLocked); 
     	$this->multiLogin = !empty($this->config['user']->multiLogin); 
 	}
 
-
-	public function getUserByEmail($email) {
-		$result = $this->db->fetch("user/getUserByEmail",['email' => $email]);
+	public static function getUserByEmail($email) {
+		$query = new Self();
+		$result = $query->db->fetch("user/getUserByEmail",['email' => $email]);
 	
 		return $result->id_user ?? null;
 	}
@@ -61,23 +57,48 @@ class User extends Entity {
 		$this->setValue('password',$new);
 	}
 
+	public function search ($payload=[]) {
+		$defaults = [
+			'name' => '',
+		];
+		$payload = array_replace($defaults, $payload);
+		return parent::search($payload);
+	}
+
+
+
+	public function setValue ($field, $value=false) {
+		if (is_array($field)) {
+			foreach ($field as $k => $v) {
+				if (strstr($k,'password')) {
+					$field[$k] = $this->password_hash($v);
+				}
+			}
+		}
+		else if (strstr($field, 'password')) {
+			$value = $this->password_hash($value);
+		
+		}
+		parent::setValue($field, $value);
+	}
+
 	private function password_hash ($password) {
 		return password_hash($password, PASSWORD_BCRYPT);
 	}
 
 	public static function isAdmin () {
-		$user = new self($_SESSION['email']);
+		$user = new self($_SESSION['user_id']);
 		$level = $user->getValue('permission');
 		return strtolower($level) == 'admin';
 	}
 
 	public static function isLoggedIn ($ip_locked = true) {
 
-		if (empty($_SESSION['email'])) {
+		if (empty($_SESSION['user_id'])) {
 			return false;
 		}
 
-		$user = new self($_SESSION['email']);
+		$user = new self($_SESSION['user_id']);
 
 		if (empty($user->multiLogin) && (empty($_SESSION['token']) || $_SESSION['token'] != $user->getValue('token'))) {
 			$user->logOut();
@@ -94,26 +115,25 @@ class User extends Entity {
 
 	public static function logIn ($email, $password) {
 
-
-
-
-		$user = new self();
-		$user_id = $user->getUserByEmail($email);
-	
+		$user_id = self::getUserByEmail($email);
 		$user = new self($user_id);
+
 		$realPassword = $user->getValue('password');
 	
 		if (!password_verify($password, $realPassword)) {
 			throw new Exception("Failed to Login");
 		}
 
-		$ip = $_SERVER['REMOTE_ADDR'];
 		$token = rand(0,9000);
+		$_SESSION['user_id'] = $user_id;
 		$_SESSION['email'] = $email;
 		$_SESSION['token'] = $token;
-		$user->setValue('ip', $_SERVER['REMOTE_ADDR']);
-		$user->setValue('token', $token);
 
+		$payload = [
+			'ip' => $_SERVER['REMOTE_ADDR'],
+			'token' => $token,
+		];
+		$user->setValue($payload);
 	}
 
 	public static function logOut () {
