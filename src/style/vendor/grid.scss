@@ -40,9 +40,11 @@ $breakPoints : (
   }
   @for $i from 1 through $columns {
        $current_width: $i * $width - 1;
-       @if ($breakpoint < $split) {
+
+       @if ($breakpoint < $split || $i == $columns) {
             $current_width: 100%;
        }
+
        .col-#{$i} { 
           box-sizing: border-box;
           text-align: left;
