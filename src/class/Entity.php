@@ -54,7 +54,6 @@ class Entity {
     } 
     
     public function search ($filters=false) { 
-
         return $this->db->fetchAll("{$this->type}/search", $filters);
     }
 
