@@ -1,23 +1,86 @@
 <div class="container">
-	<div class="row">
-        <div class="col-3">
-			<h1>Dash</h1>
-		</div>
-		<div class="col-9">
 
+
+<div class="row--full">
+	<div class="col-2">
+    	
+    	<div class="c-box">
+    		<div class="title">Rooms</div>
+    		- <a href="./?room=1">Room 1</a><br />
+    		- <a href="./?room=2">Room 2</a><br />
+    	</div>
+	</div>  
+	<div class="col-10">   
+		<div class="col-12 c-box b-green js-chat" style="min-height: 100%;">
+			<div class="js-chat-window" style="height: 600px; overflow-y: scroll;">
+				<div class="Viewing Room!"></div>
+				<div data-template="message" style="border-top: 1px dotted #ccc;">Nothing Here</div>
+			</div>
 		</div>
- 	</div>
- 	<div class="row--full">
-		<div class="col-12 c-box b-green">
-			<div data-template="message">Nothing Here</div>
-		</div>
-		<div class="col-12 c-box b-blue" style=" position:fixed; bottom: 0px;">
+		<div class="col-12 c-box b-blue">
 			<form method="post">
 				<input type="hidden" name="id_room"/>
 				<input type="hidden" name="do" value="message" />
 				<textarea name="message"></textarea>
-				<button>Send</button>
+				<button class="js-chat-update">Send</button>
 			</form>
 		</div>
- 	</div>
+	</div>  
 </div>
+</div>
+
+
+
+
+
+
+<script>
+
+	function reloadChat() {
+		var room = document.querySelector('[name="id_room"]').value;
+		var url = '/?room='+room;
+
+		var xhr = new XMLHttpRequest();
+	    xhr.open( "GET", url, true );
+	    xhr.onreadystatechange = function () {
+		    if (xhr.readyState == 4) {
+				var parser = new DOMParser();
+			    var newDom = parser.parseFromString(xhr.responseText,"text/html");	   	
+
+			    document.querySelectorAll('.js-chat')[0].innerHTML = newDom.querySelectorAll('.js-chat')[0].innerHTML;
+		    	document.querySelectorAll('.js-chat-window')[0].scrollTop = document.querySelectorAll('.js-chat-window')[0].scrollHeight;
+		    }
+		}
+	    xhr.send( null );
+	}
+
+	function sendMessage() {
+		var room = document.querySelector('[name="id_room"]').value;
+		var message = document.querySelector('[name="message"]');
+
+		var xhr = new XMLHttpRequest();
+	    xhr.open( "POST", "/", true );
+	    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	    xhr.onreadystatechange = function () {
+
+		}
+	    xhr.send('id_room='+room+'&message='+message.value+'&do=message');
+	    message.value = '';
+	}
+
+	var chatUpdate = document.querySelector('.js-chat-update');
+	chatUpdate.addEventListener('click',function(e) {
+		e.preventDefault();
+		sendMessage();
+		reloadChat();
+		console.log('done');
+	});
+
+	window.onload=function () {
+		reloadChat();
+	};
+	setInterval(function(){ 
+    	reloadChat();  
+	}, 5000);
+
+</script>

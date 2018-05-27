@@ -12,7 +12,6 @@ class Room extends Entity {
 		parent::__construct($identifier);
 	}
 
-
 	public function messageSearch ($payload=[]) {
 		$payload["id_room"] = $this->identifier;
 		return $this->db->fetchAll("message/search",$payload);

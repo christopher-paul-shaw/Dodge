@@ -39,9 +39,9 @@ class Index extends \Gt\Page\Logic {
 
 	public function do_message ($data) {
 		$data['id_user'] = $_SESSION['user_id'];
+
 		$message = new Message();
 		$message->create($data);
-		header('Location: ./');
-		die;
+		die('x');
 	}
 }

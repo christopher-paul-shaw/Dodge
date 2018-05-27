@@ -8,6 +8,7 @@ nav {
 
 * {
   box-sizing: border-box;
+  vertical-align: top;
 }
 $breakPoints : (
   'xxl': 18000px,
@@ -26,6 +27,7 @@ $breakPoints : (
    max-width: 100%;
    width: 100%;
   }
+
 }
 
 @mixin grid_columns($columns, $breakpoint) {
@@ -41,7 +43,7 @@ $breakPoints : (
   @for $i from 1 through $columns {
        $current_width: $i * $width - 1;
 
-       @if ($breakpoint < $split || $i == $columns) {
+       @if ($breakpoint < $split) {
             $current_width: 100%;
        }
 
@@ -50,9 +52,9 @@ $breakPoints : (
           text-align: left;
           padding: 8px;
     
-          vertical-align: middle;
-            display: #{$display};
-            width: $current_width;
+          vertical-align: top;;
+          display: #{$display};
+          width: $current_width;
        }
   }
 }
