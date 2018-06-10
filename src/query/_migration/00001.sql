@@ -9,3 +9,5 @@ CREATE TABLE `user` (
   `permission` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_user`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+INSERT INTO `dodge`.`user` (`email`, `password`, `name`, `permission`) VALUES ('admin@dodge', '$2y$10$29VbfkbK5bQILLmayQ6auejnWrNu84AE6AeF2exu6BI3MWldxuRsW', 'Default Admin', 'admin');
