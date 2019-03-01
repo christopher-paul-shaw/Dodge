@@ -1,4 +1,4 @@
-CREATE TABLE `dodge`.`message` (
+CREATE TABLE `message` (
   `id_message` INT NOT NULL AUTO_INCREMENT,
   `id_room` INT NULL,
   `id_user` INT NULL,
